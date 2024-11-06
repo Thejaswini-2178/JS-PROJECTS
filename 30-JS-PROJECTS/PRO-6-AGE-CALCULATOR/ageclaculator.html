@@ -87,7 +87,6 @@
             if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
                 age--;
             }
-
             // Display result
             const ageResult = document.getElementById('ageResult');
             ageResult.textContent = `You are ${age} years old.`;
