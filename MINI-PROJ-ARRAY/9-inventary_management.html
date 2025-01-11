@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+            width: 100%;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        td button {
+            margin-right: 5px;
+            background-color: #28a745;
+            border: none;
+            cursor: pointer;
+        }
+        td button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Management System</h1>
+        <form id="productForm">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productQuantity" placeholder="Quantity" required>
+            <input type="number" id="productPrice" placeholder="Price" required>
+            <button type="submit">Add Product</button>
+        </form>
+
+        <h2>Product Inventory</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productTable">
+                <!-- Products will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let products = [];
+        let productId = 1;
+
+        // Function to add a product
+        function addProduct(name, quantity, price) {
+            let product = {
+                id: productId++,
+                name: name,
+                quantity: quantity,
+                price: price
+            };
+            products.push(product);
+            displayProducts();
+        }
+
+        // Function to update product quantity
+        function updateProduct(id, newQuantity) {
+            let product = products.find(function(p) {
+                return p.id === id;
+            });
+            if (product) {
+                product.quantity = newQuantity;
+                displayProducts();
+            }
+        }
+
+        // Function to delete product
+        function deleteProduct(id) {
+            products = products.filter(function(p) {
+                return p.id !== id;
+            });
+            displayProducts();
+        }
+
+        // Function to display all products in the table
+        function displayProducts() {
+            let tableBody = document.getElementById('productTable');
+            tableBody.innerHTML = '';
+
+            for (let i = 0; i < products.length; i++) {
+                let row = document.createElement('tr');
+                let idCell = document.createElement('td');
+                idCell.textContent = products[i].id;
+                let nameCell = document.createElement('td');
+                nameCell.textContent = products[i].name;
+                let quantityCell = document.createElement('td');
+                quantityCell.textContent = products[i].quantity;
+                let priceCell = document.createElement('td');
+                priceCell.textContent = '₹' + products[i].price.toFixed(2);
+
+                let actionsCell = document.createElement('td');
+                let editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.onclick = function() {
+                    let newQuantity = prompt('Enter new quantity:', products[i].quantity);
+                    if (newQuantity !== null && !isNaN(newQuantity)) {
+                        updateProduct(products[i].id, parseInt(newQuantity, 10));
+                    }
+                };
+                actionsCell.appendChild(editButton);
+
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = function() {
+                    deleteProduct(products[i].id);
+                };
+                actionsCell.appendChild(deleteButton);
+
+                row.appendChild(idCell);
+                row.appendChild(nameCell);
+                row.appendChild(quantityCell);
+                row.appendChild(priceCell);
+                row.appendChild(actionsCell);
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Add product when form is submitted
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById('productName').value;
+            let quantity = parseInt(document.getElementById('productQuantity').value, 10);
+            let price = parseFloat(document.getElementById('productPrice').value);
+
+            if (name && quantity >= 0 && price >= 0) {
+                addProduct(name, quantity, price);
+                this.reset();
+            }
+        });
+
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        form { margin-bottom: 20px; }
+        input, button { margin: 5px; padding: 10px; font-size: 16px; }
+        button { background: #007BFF; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #007BFF; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Management</h1>
+        <form id="productForm">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productQuantity" placeholder="Quantity" required>
+            <input type="number" id="productPrice" placeholder="Price" required>
+            <button type="submit">Add Product</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let products = [];
+        let productId = 1;
+        let editMode = false; // To track whether we are in edit mode
+        let currentProductId = null; // Store the current product ID being edited
+
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('productName').value;
+            const quantity = parseInt(document.getElementById('productQuantity').value, 10);
+            const price = parseFloat(document.getElementById('productPrice').value);
+
+            if (editMode) {
+                updateProduct(currentProductId, name, quantity, price);
+            } else {
+                addProduct(name, quantity, price);
+            }
+            this.reset();
+        });
+
+        function addProduct(name, quantity, price) {
+            products.push({ id: productId++, name, quantity, price });
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const tableBody = document.getElementById('productTable');
+            tableBody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.quantity}</td>
+                    <td>₹${product.price.toFixed(2)}</td>
+                    <td>
+                        <button onclick="editProduct(${product.id})">Edit</button>
+                        <button onclick="deleteProduct(${product.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productQuantity').value = product.quantity;
+                document.getElementById('productPrice').value = product.price;
+
+                editMode = true;
+                currentProductId = id;
+            }
+        }
+
+        function updateProduct(id, name, quantity, price) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                product.name = name;
+                product.quantity = quantity;
+                product.price = price;
+                displayProducts();
+                editMode = false;
+                currentProductId = null;
+            }
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            displayProducts();
+        } -->
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        form { margin-bottom: 20px; }
+        input, button { margin: 5px; padding: 10px; font-size: 16px; }
+        button { background: #007BFF; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #007BFF; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Management</h1>
+        <form id="productForm">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productQuantity" placeholder="Quantity" required>
+            <input type="number" id="productPrice" placeholder="Price" required>
+            <button type="submit">Add Product</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const products = [];
+        let productId = 1;
+
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('productName').value;
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const price = parseFloat(document.getElementById('productPrice').value);
+            
+            products.push({ id: productId++, name, quantity, price });
+            displayProducts();
+            this.reset();
+        });
+
+        function displayProducts() {
+            const tableBody = document.getElementById('productTable');
+            tableBody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.quantity}</td>
+                    <td>₹${product.price.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html> -->
