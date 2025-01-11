@@ -1,21 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-        .container { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; }
-        form { margin-bottom: 20px; }
-        input, button { margin: 5px; padding: 10px; font-size: 16px; }
-        button { background: #007BFF; color: white; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background: #007BFF; color: white; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #007BFF;
+            color: white;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Inventory Management</h1>
@@ -42,12 +87,12 @@
         const products = [];
         let productId = 1;
 
-        document.getElementById('productForm').addEventListener('submit', function(event) {
+        document.getElementById('productForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const name = document.getElementById('productName').value;
             const quantity = parseInt(document.getElementById('productQuantity').value);
             const price = parseFloat(document.getElementById('productPrice').value);
-            
+
             products.push({ id: productId++, name, quantity, price });
             displayProducts();
             this.reset();
@@ -66,4 +111,5 @@
         }
     </script>
 </body>
+
 </html>
