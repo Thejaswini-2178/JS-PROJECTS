@@ -88,8 +88,19 @@
 
         <!-- Sort Button -->
         <button id="sortBtn">Sort by Name</button>
-    </div>
 
+        <!-- Find Product Section -->
+        <div>
+            <input type="number" id="productIdToFind" placeholder="Enter Product ID to Find">
+            <button id="findProductBtn">Find Product</button>
+        </div>
+
+        <!-- Remove Product Section -->
+        <div>
+            <input type="number" id="productIdToRemove" placeholder="Enter Product ID to Remove">
+            <button id="removeProductBtn">Remove Product</button>
+        </div>
+    </div>
     <script>
         let inventory = [];
         let productId = 0; // To assign unique ID for each product
@@ -99,6 +110,8 @@
         const inventoryList = document.getElementById("inventoryList");
         const totalQuantity = document.getElementById("totalQuantity");
         const sortBtn = document.getElementById("sortBtn");
+        const findProductBtn = document.getElementById("findProductBtn");
+        const removeProductBtn = document.getElementById("removeProductBtn");
 
         // Add product to inventory
         addProductBtn.addEventListener("click", function () {
@@ -113,7 +126,7 @@
                     quantity: parseInt(productQuantity)
                 };
 
-                inventory.push(product);
+                inventory.push(product); // Using push() to add product to the inventory
                 displayProducts();
                 calculateTotalQuantity();
                 clearInputs();
@@ -122,17 +135,18 @@
             }
         });
 
-        // Display all products in the inventory
+        // Display all products in the inventory using forEach() and Object.keys()
         function displayProducts() {
             inventoryList.innerHTML = ""; // Clear previous list
-            inventory.forEach(function (product) {
+            Object.keys(inventory).forEach(function (index) {
+                const product = inventory[index];
                 const listItem = document.createElement("li");
                 listItem.textContent = `${product.name} - Quantity: ${product.quantity}`;
                 inventoryList.appendChild(listItem);
             });
         }
 
-        // Calculate total quantity of products
+        // Calculate total quantity of products using reduce()
         function calculateTotalQuantity() {
             const total = inventory.reduce(function (acc, product) {
                 return acc + product.quantity;
@@ -146,12 +160,45 @@
             document.getElementById("productQuantity").value = "";
         }
 
-        // Sort products by name
+        // Sort products by name using sort()
         sortBtn.addEventListener("click", function () {
             inventory.sort(function (a, b) {
                 return a.name.localeCompare(b.name);
             });
             displayProducts();
+        });
+
+        // Find product by ID using find()
+        findProductBtn.addEventListener("click", function () {
+            const productIdToFind = document.getElementById("productIdToFind").value;
+            const product = inventory.find(function (product) {
+                return product.id === parseInt(productIdToFind);
+            });
+
+            if (product) {
+                alert(`Product found: ${product.name} - Quantity: ${product.quantity}`);
+            } else {
+                alert("Product not found.");
+            }
+        });
+
+        // Remove product by ID using filter() and findIndex()
+        removeProductBtn.addEventListener("click", function () {
+            const productIdToRemove = document.getElementById("productIdToRemove").value;
+            const index = inventory.findIndex(function (product) {
+                return product.id === parseInt(productIdToRemove);
+            });
+
+            if (index !== -1) {
+                inventory = inventory.filter(function (product, idx) {
+                    return idx !== index;
+                });
+                displayProducts();
+                calculateTotalQuantity();
+                alert("Product removed.");
+            } else {
+                alert("Product not found.");
+            }
         });
 
     </script>
