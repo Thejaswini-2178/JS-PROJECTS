@@ -74,6 +74,7 @@
 
         <!-- Add Product Section -->
         <div>
+            <input type="number" id="productId" placeholder="Product ID">
             <input type="text" id="productName" placeholder="Product Name">
             <input type="number" id="productQuantity" placeholder="Product Quantity">
             <button id="addProductBtn">Add Product</button>
@@ -101,9 +102,9 @@
             <button id="removeProductBtn">Remove Product</button>
         </div>
     </div>
+
     <script>
         let inventory = [];
-        let productId = 0; // To assign unique ID for each product
 
         // Select DOM elements
         const addProductBtn = document.getElementById("addProductBtn");
@@ -115,84 +116,78 @@
 
         // Add product to inventory
         addProductBtn.addEventListener("click", function () {
+            const productId = parseInt(document.getElementById("productId").value);
             const productName = document.getElementById("productName").value;
-            const productQuantity = document.getElementById("productQuantity").value;
+            const productQuantity = parseInt(document.getElementById("productQuantity").value);
 
-            if (productName && productQuantity > 0) {
-                productId++; // Increment product ID for each new product
-                const product = {
-                    id: productId,
-                    name: productName,
-                    quantity: parseInt(productQuantity)
-                };
-
-                inventory.push(product); // Using push() to add product to the inventory
-                displayProducts();
-                calculateTotalQuantity();
-                clearInputs();
-            } else {
+            if (isNaN(productId) || !productName || productQuantity <= 0) {
                 alert("Please enter valid product details.");
+                return;
             }
+
+            // Check if the product ID already exists
+            const existingProduct = inventory.find(product => product.id === productId);
+            if (existingProduct) {
+                alert("Product ID already exists. Please use a unique ID.");
+                return;
+            }
+
+            const product = { id: productId, name: productName, quantity: productQuantity };
+            inventory.push(product); // Using push() to add product to the inventory
+            displayProducts();
+            calculateTotalQuantity();
+            clearInputs();
         });
 
-        // Display all products in the inventory using forEach() and Object.keys()
+        // Display all products in the inventory using forEach()
         function displayProducts() {
             inventoryList.innerHTML = ""; // Clear previous list
-            Object.keys(inventory).forEach(function (index) {
-                const product = inventory[index];
+            inventory.forEach(function (product) {
                 const listItem = document.createElement("li");
-                listItem.textContent = `${product.name} - Quantity: ${product.quantity}`;
+                listItem.textContent = `ID: ${product.id}, Name: ${product.name}, Quantity: ${product.quantity}`;
                 inventoryList.appendChild(listItem);
             });
         }
 
         // Calculate total quantity of products using reduce()
         function calculateTotalQuantity() {
-            const total = inventory.reduce(function (acc, product) {
-                return acc + product.quantity;
-            }, 0);
+            const total = inventory.reduce((acc, product) => acc + product.quantity, 0);
             totalQuantity.textContent = total;
         }
 
         // Clear input fields
         function clearInputs() {
+            document.getElementById("productId").value = "";
             document.getElementById("productName").value = "";
             document.getElementById("productQuantity").value = "";
         }
 
         // Sort products by name using sort()
         sortBtn.addEventListener("click", function () {
-            inventory.sort(function (a, b) {
-                return a.name.localeCompare(b.name);
-            });
+            inventory.sort((a, b) => a.name.localeCompare(b.name));
             displayProducts();
         });
 
         // Find product by ID using find()
         findProductBtn.addEventListener("click", function () {
-            const productIdToFind = document.getElementById("productIdToFind").value;
-            const product = inventory.find(function (product) {
-                return product.id === parseInt(productIdToFind);
-            });
+            const productIdToFind = parseInt(document.getElementById("productIdToFind").value);
+            const product = inventory.find(product => product.id === productIdToFind);
 
             if (product) {
-                alert(`Product found: ${product.name} - Quantity: ${product.quantity}`);
+                alert(`Product found: Name: ${product.name}, Quantity: ${product.quantity}`);
             } else {
                 alert("Product not found.");
             }
         });
 
-        // Remove product by ID using filter() and findIndex()
+        // Remove product by ID using filter()
         removeProductBtn.addEventListener("click", function () {
-            const productIdToRemove = document.getElementById("productIdToRemove").value;
-            const index = inventory.findIndex(function (product) {
-                return product.id === parseInt(productIdToRemove);
-            });
+            const productIdToRemove = parseInt(document.getElementById("productIdToRemove").value);
+            const initialLength = inventory.length;
 
-            if (index !== -1) {
-                inventory = inventory.filter(function (product, idx) {
-                    return idx !== index;
-                });
+            inventory = inventory.filter(product => product.id !== productIdToRemove);
+
+            if (inventory.length < initialLength) {
                 displayProducts();
                 calculateTotalQuantity();
                 alert("Product removed.");
@@ -200,7 +195,6 @@
                 alert("Product not found.");
             }
         });
-
     </script>
 </body>
 
