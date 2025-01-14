@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,8 @@
       margin-bottom: 20px;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -87,6 +89,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Expense Tracker</h1>
@@ -103,29 +106,30 @@
     </div>
   </div>
   <script>
-     const expenses=[]
-     function addExpense(){
-        const categoryInput=document.getElementById("category")
-        const amountInput=document.getElementById("amount")
-        const errorElement=document.getElementById("error")
+    const expenses = []
+    function addExpense() {
+      const categoryInput = document.getElementById("category")
+      const amountInput = document.getElementById("amount")
+      const errorElement = document.getElementById("error")
 
-        const category=categoryInput.value.trim();
-        const amount=amountInput.value;
-        if(!category || isNaN(amount) || amount<=0){
-            errorElement.textContent='Please enter  a valid category and amount'
-            return
-        }
-        errorElement.textContent=""
-        expenses.push({category,amount})
+      const category = categoryInput.value.trim();
+      const amount = amountInput.value;
+      if (!category || isNaN(amount) || amount <= 0) {
+        errorElement.textContent = 'Please enter  a valid category and amount'
+        return
+      }
+      errorElement.textContent = ""
+      expenses.push({ category, amount })
 
-        categoryInput.value=""
-        amountInput.value=""
-        console.log(expenses)
-     }
-     function updateSummary(){
-        const summaryElement=document.getElementById("summary")
-        const totalExpense=document.getElementById("total-expense")
-     }
+      categoryInput.value = ""
+      amountInput.value = ""
+      console.log(expenses)
+    }
+    function updateSummary() {
+      const summaryElement = document.getElementById("summary")
+      const totalExpense = document.getElementById("total-expense")
+    }
   </script>
 </body>
+
 </html>
