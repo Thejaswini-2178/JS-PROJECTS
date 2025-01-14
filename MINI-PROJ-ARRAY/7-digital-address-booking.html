@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +10,24 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
+
     .container {
       max-width: 600px;
       margin: auto;
     }
-    input, button {
+
+    input,
+    button {
       margin: 5px 0;
       padding: 8px;
       width: 100%;
     }
+
     ul {
       list-style-type: none;
       padding: 0;
     }
+
     li {
       padding: 5px 0;
       border-bottom: 1px solid #ccc;
@@ -29,6 +35,7 @@
       justify-content: space-between;
       align-items: center;
     }
+
     button.delete {
       background-color: red;
       color: white;
@@ -38,6 +45,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Digital Address Book</h1>
@@ -74,14 +82,14 @@
 
     function searchContacts() {
       var query = document.getElementById("search").value.toLowerCase();
-      var filteredContacts = contacts.filter(function(contact) {
+      var filteredContacts = contacts.filter(function (contact) {
         return contact.name.toLowerCase().includes(query) || contact.email.toLowerCase().includes(query);
       });
       displayContacts(filteredContacts);
     }
 
     function deleteContact(email) {
-      contacts = contacts.filter(function(contact) {
+      contacts = contacts.filter(function (contact) {
         return contact.email !== email;
       });
       displayContacts();
@@ -92,14 +100,14 @@
       list.innerHTML = "";
       var contactsToDisplay = filteredContacts || contacts;
 
-      contactsToDisplay.forEach(function(contact) {
+      contactsToDisplay.forEach(function (contact) {
         var li = document.createElement("li");
         li.textContent = contact.name + " - " + contact.email + " - " + contact.phone;
 
         var deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
         deleteBtn.className = "delete";
-        deleteBtn.onclick = function() {
+        deleteBtn.onclick = function () {
           deleteContact(contact.email);
         };
 
@@ -109,4 +117,5 @@
     }
   </script>
 </body>
+
 </html>
