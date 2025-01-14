@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,8 @@
       margin-bottom: 20px;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -87,6 +89,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Expense Tracker</h1>
@@ -120,7 +123,7 @@
       }
 
       errorElement.textContent = '';
-      expenses.push({ category:category, amount:amount });
+      expenses.push({ category: category, amount: amount });
 
       categoryInput.value = '';
       amountInput.value = '';
@@ -144,18 +147,18 @@
       const sortedCategories = Object.keys(categories).sort();
       let totalExpense = 0;
 
-    //   if (sortedCategories.length === 0) {
-    //     summaryElement.innerHTML = 'No expenses yet.';
-    //     totalExpenseElement.textContent = '0.00';
-    //     return;
-    //   }
+      //   if (sortedCategories.length === 0) {
+      //     summaryElement.innerHTML = 'No expenses yet.';
+      //     totalExpenseElement.textContent = '0.00';
+      //     return;
+      //   }
 
       sortedCategories.forEach(category => {
         const total = categories[category];
         totalExpense += total;
         const div = document.createElement('div');
         div.classList.add('category');
-        div.innerHTML =  category+" Total amount : $"+total
+        div.innerHTML = category + " Total amount : $" + total
         summaryElement.appendChild(div);
       });
 
@@ -163,4 +166,5 @@
     }
   </script>
 </body>
+
 </html>
