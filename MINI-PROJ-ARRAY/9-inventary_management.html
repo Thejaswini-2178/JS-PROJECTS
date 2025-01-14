@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -19,55 +21,69 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
             color: #333;
         }
+
         form {
             margin-bottom: 20px;
         }
-        input, button {
+
+        input,
+        button {
             padding: 10px;
             margin: 5px 0;
             font-size: 16px;
             width: 100%;
         }
+
         button {
             background-color: #007BFF;
             color: white;
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         table {
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: left;
         }
+
         th {
             background-color: #007BFF;
             color: white;
         }
+
         .sort-buttons {
             margin-top: 10px;
         }
+
         .sort-buttons button {
             width: 48%;
             margin-right: 2%;
             background-color: #28a745;
         }
+
         .sort-buttons button:hover {
             background-color: #218838;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Inventory Management System</h1>
@@ -118,7 +134,7 @@
 
         // Function to update product quantity
         function updateProduct(id, newQuantity) {
-            let product = products.find(function(p) {
+            let product = products.find(function (p) {
                 return p.id === id;
             });
             if (product) {
@@ -129,7 +145,7 @@
 
         // Function to delete product
         function deleteProduct(id) {
-            products = products.filter(function(p) {
+            products = products.filter(function (p) {
                 return p.id !== id;
             });
             displayProducts();
@@ -154,7 +170,7 @@
                 let actionsCell = document.createElement('td');
                 let editButton = document.createElement('button');
                 editButton.textContent = 'Edit';
-                editButton.onclick = function() {
+                editButton.onclick = function () {
                     let newQuantity = prompt('Enter new quantity:', products[i].quantity);
                     if (newQuantity !== null && !isNaN(newQuantity)) {
                         updateProduct(products[i].id, parseInt(newQuantity, 10));
@@ -164,7 +180,7 @@
 
                 let deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
-                deleteButton.onclick = function() {
+                deleteButton.onclick = function () {
                     deleteProduct(products[i].id);
                 };
                 actionsCell.appendChild(deleteButton);
@@ -179,23 +195,23 @@
         }
 
         // Sort by Name
-        document.getElementById('sortByName').addEventListener('click', function() {
-            products.sort(function(a, b) {
+        document.getElementById('sortByName').addEventListener('click', function () {
+            products.sort(function (a, b) {
                 return a.name.localeCompare(b.name);
             });
             displayProducts();
         });
 
         // Sort by Price
-        document.getElementById('sortByPrice').addEventListener('click', function() {
-            products.sort(function(a, b) {
+        document.getElementById('sortByPrice').addEventListener('click', function () {
+            products.sort(function (a, b) {
                 return a.price - b.price;
             });
             displayProducts();
         });
 
         // Add product when form is submitted
-        document.getElementById('productForm').addEventListener('submit', function(event) {
+        document.getElementById('productForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             let name = document.getElementById('productName').value;
@@ -209,6 +225,7 @@
         });
     </script>
 </body>
+
 </html>
 
 
