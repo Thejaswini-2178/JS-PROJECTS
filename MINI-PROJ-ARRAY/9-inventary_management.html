@@ -5,390 +5,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        input,
-        button {
-            padding: 10px;
-            margin: 5px 0;
-            font-size: 16px;
-            width: 100%;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        .sort-buttons {
-            margin-top: 10px;
-        }
-
-        .sort-buttons button {
-            width: 48%;
-            margin-right: 2%;
-            background-color: #28a745;
-        }
-
-        .sort-buttons button:hover {
-            background-color: #218838;
-        }
-    </style>
+    <script src="app.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="container">
-        <h1>Inventory Management System</h1>
-        <form id="productForm">
-            <input type="text" id="productName" placeholder="Product Name" required>
-            <input type="number" id="productQuantity" placeholder="Quantity" required>
-            <input type="number" id="productPrice" placeholder="Price" required>
-            <button type="submit">Add Product</button>
-        </form>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold text-center mb-6">Inventory Management System</h1>
 
-        <div class="sort-buttons">
-            <button id="sortByName">Sort by Name</button>
-            <button id="sortByPrice">Sort by Price</button>
+        <!-- Add Product Form -->
+        <div class="bg-white p-6 rounded shadow mb-6">
+            <form id="productForm" class="space-y-4">
+                <input type="text" id="productName" class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter product name" required />
+                <input type="number" id="productQuantity" class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter quantity" required />
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                    Add Product
+                </button>
+            </form>
         </div>
 
-        <h2>Product Inventory</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="productTable">
-                <!-- Products will be displayed here -->
-            </tbody>
-        </table>
+        <!-- Product List Section -->
+        <div id="productList" class="space-y-6">
+            <!-- Dynamic Product List Will Be Rendered Here -->
+        </div>
+
+        <!-- Total Quantity Section -->
+        <div class="bg-white p-4 rounded shadow mt-6">
+            <h2 class="text-lg font-semibold">Total Quantity: <span id="totalQuantity">0</span></h2>
+        </div>
     </div>
-
     <script>
-        let products = [];
-        let productId = 1;
 
-        // Function to add a product
-        function addProduct(name, quantity, price) {
-            let product = {
-                id: productId++,
-                name: name,
-                quantity: quantity,
-                price: price
-            };
-            products.push(product);
-            displayProducts();
-        }
+        const inventorySystem = {
+            products: [],
 
-        // Function to update product quantity
-        function updateProduct(id, newQuantity) {
-            let product = products.find(function (p) {
-                return p.id === id;
-            });
-            if (product) {
-                product.quantity = newQuantity;
-                displayProducts();
-            }
-        }
-
-        // Function to delete product
-        function deleteProduct(id) {
-            products = products.filter(function (p) {
-                return p.id !== id;
-            });
-            displayProducts();
-        }
-
-        // Function to display all products in the table
-        function displayProducts() {
-            let tableBody = document.getElementById('productTable');
-            tableBody.innerHTML = '';
-
-            for (let i = 0; i < products.length; i++) {
-                let row = document.createElement('tr');
-                let idCell = document.createElement('td');
-                idCell.textContent = products[i].id;
-                let nameCell = document.createElement('td');
-                nameCell.textContent = products[i].name;
-                let quantityCell = document.createElement('td');
-                quantityCell.textContent = products[i].quantity;
-                let priceCell = document.createElement('td');
-                priceCell.textContent = '₹' + products[i].price.toFixed(2);
-
-                let actionsCell = document.createElement('td');
-                let editButton = document.createElement('button');
-                editButton.textContent = 'Edit';
-                editButton.onclick = function () {
-                    let newQuantity = prompt('Enter new quantity:', products[i].quantity);
-                    if (newQuantity !== null && !isNaN(newQuantity)) {
-                        updateProduct(products[i].id, parseInt(newQuantity, 10));
-                    }
+            // Add a new product
+            addProduct(name, quantity) {
+                const productId = Date.now(); // Unique ID based on timestamp
+                const newProduct = {
+                    id: productId,
+                    name,
+                    quantity: parseInt(quantity, 10),
                 };
-                actionsCell.appendChild(editButton);
 
-                let deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.onclick = function () {
-                    deleteProduct(products[i].id);
-                };
-                actionsCell.appendChild(deleteButton);
+                this.products.push(newProduct);
+                this.renderProducts();
+                this.resetForm();
+            },
 
-                row.appendChild(idCell);
-                row.appendChild(nameCell);
-                row.appendChild(quantityCell);
-                row.appendChild(priceCell);
-                row.appendChild(actionsCell);
-                tableBody.appendChild(row);
-            }
-        }
+            // Update product quantity
+            updateProductQuantity(id, newQuantity) {
+                const productIndex = this.products.findIndex(product => product.id === id);
+                if (productIndex !== -1) {
+                    this.products[productIndex].quantity = newQuantity;
+                    this.renderProducts();
+                } else {
+                    alert("Product not found!");
+                }
+            },
 
-        // Sort by Name
-        document.getElementById('sortByName').addEventListener('click', function () {
-            products.sort(function (a, b) {
-                return a.name.localeCompare(b.name);
-            });
-            displayProducts();
-        });
+            // Remove a product
+            removeProduct(id) {
+                this.products = this.products.filter(product => product.id !== id);
+                this.renderProducts();
+            },
 
-        // Sort by Price
-        document.getElementById('sortByPrice').addEventListener('click', function () {
-            products.sort(function (a, b) {
-                return a.price - b.price;
-            });
-            displayProducts();
-        });
+            // Calculate total quantity
+            calculateTotalQuantity() {
+                return this.products.reduce((total, product) => total + product.quantity, 0);
+            },
 
-        // Add product when form is submitted
-        document.getElementById('productForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+            // Sort products by name
+            sortProductsByName() {
+                this.products.sort((a, b) => a.name.localeCompare(b.name));
+                this.renderProducts();
+            },
 
-            let name = document.getElementById('productName').value;
-            let quantity = parseInt(document.getElementById('productQuantity').value, 10);
-            let price = parseFloat(document.getElementById('productPrice').value);
+            // Render product list
+            renderProducts() {
+                const productList = document.getElementById("productList");
+                const totalQuantity = document.getElementById("totalQuantity");
 
-            if (name && quantity >= 0 && price >= 0) {
-                addProduct(name, quantity, price);
-                this.reset();
+                productList.innerHTML = ""; // Clear existing list
+                this.products.forEach(product => {
+                    const productDiv = document.createElement("div");
+                    productDiv.className = "bg-white p-4 rounded shadow";
+
+                    productDiv.innerHTML = `
+          <p class="font-semibold">${product.name} (Quantity: ${product.quantity})</p>
+          <div class="mt-4">
+            <button
+              class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+              onclick="inventorySystem.promptUpdateQuantity(${product.id})"
+            >
+              Update Quantity
+            </button>
+            <button
+              class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+              onclick="inventorySystem.removeProduct(${product.id})"
+            >
+              Remove
+            </button>
+          </div>
+        `;
+
+                    productList.appendChild(productDiv);
+                });
+
+                // Update total quantity
+                totalQuantity.textContent = this.calculateTotalQuantity();
+            },
+
+            // Prompt to update product quantity
+            promptUpdateQuantity(id) {
+                const newQuantity = prompt("Enter new quantity:");
+                if (newQuantity && !isNaN(newQuantity) && parseInt(newQuantity, 10) >= 0) {
+                    this.updateProductQuantity(id, parseInt(newQuantity, 10));
+                } else {
+                    alert("Invalid quantity!");
+                }
+            },
+
+            // Reset the form
+            resetForm() {
+                document.getElementById("productName").value = "";
+                document.getElementById("productQuantity").value = "";
+            },
+        };
+
+        // Handle Add Product form submission
+        document.getElementById("productForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("productName").value.trim();
+            const quantity = document.getElementById("productQuantity").value.trim();
+
+            if (name && quantity && parseInt(quantity, 10) > 0) {
+                inventorySystem.addProduct(name, quantity);
+            } else {
+                alert("Please enter valid product details!");
             }
         });
     </script>
 </body>
 
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 5px 0;
-            font-size: 16px;
-            width: 100%;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-        td button {
-            margin-right: 5px;
-            background-color: #28a745;
-            border: none;
-            cursor: pointer;
-        }
-        td button:hover {
-            background-color: #218838;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Inventory Management System</h1>
-        <form id="productForm">
-            <input type="text" id="productName" placeholder="Product Name" required>
-            <input type="number" id="productQuantity" placeholder="Quantity" required>
-            <input type="number" id="productPrice" placeholder="Price" required>
-            <button type="submit">Add Product</button>
-        </form>
-
-        <h2>Product Inventory</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="productTable">
-                Products will be displayed here -->
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-        .container { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; }
-        form { margin-bottom: 20px; }
-        input, button { margin: 5px; padding: 10px; font-size: 16px; }
-        button { background: #007BFF; color: white; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background: #007BFF; color: white; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Inventory Management</h1>
-        <form id="productForm">
-            <input type="text" id="productName" placeholder="Product Name" required>
-            <input type="number" id="productQuantity" placeholder="Quantity" required>
-            <input type="number" id="productPrice" placeholder="Price" required>
-            <button type="submit">Add Product</button>
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody id="productTable"></tbody>
-        </table>
-    </div>
-
-    <script>
-        const products = [];
-        let productId = 1;
-
-        document.getElementById('productForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('productName').value;
-            const quantity = parseInt(document.getElementById('productQuantity').value);
-            const price = parseFloat(document.getElementById('productPrice').value);
-            
-            products.push({ id: productId++, name, quantity, price });
-            displayProducts();
-            this.reset();
-        });
-
-        function displayProducts() {
-            const tableBody = document.getElementById('productTable');
-            tableBody.innerHTML = products.map(product => `
-                <tr>
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td>${product.quantity}</td>
-                    <td>₹${product.price.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-    </script>
-</body>
-</html> -->
