@@ -57,94 +57,120 @@
         </div>
     </div>
     <script>
-        const movieTicketsBooking={
+        const movieBookingSystem={
             seats:[],
             initilizingSeats(row,col){
                 this.seats=[]
-                const rowLetters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                const rowLettering="ABCDEFGHIJKLMNOP"
                 for(var i=0;i<row;i++){
                     for(var j=1;j<col;j++){
                         this.seats.push({
-                            number:`${rowLetters[i]}${j}`,
+                            number:`${rowLettering[i]}${j}`,
                             isBooked:false
                         })
                     }
                 }
-                console.log(this.seats)
-                this.renderingSeats()
+                this.rendarinSeats()
             },
-            renderingSeats(){
+            rendarinSeats(){
                 const seatArrangement=document.getElementById("seatArrangement")
                 seatArrangement.innerHTML=""
+
                 this.seats.forEach((seat)=>{
                     const seatDiv=document.createElement("div")
                     seatDiv.className=`seat${seat.isBooked?"seat-booked":"seat-available"}`
-                    
                     seatDiv.textContent=seat.number
-                    
+
                     seatDiv.onclick=()=>{
                         if(!seat.isBooked){
-                            const seatConfirm=confirm(` Book seat ${seat.number}?`)
-                            if(seatConfirm){
+                            const conformSeat=confirm(`Book seat ${seat.number}?`)
+                            if(conformSeat){
                                 seat.isBooked=true
-                                this.renderingSeats()
+                                this.rendarinSeats()
                             }
                         }else{
-                            alert("Seat is alredy booked")
+                            alert("seat is alredy booked")
                         }
                     }
-                    seatArrangement.appendChild(seatDiv)
+                    seatArrangement.appendChild(seatDiv) 
                 })
             },
         }
-        movieTicketsBooking.initilizingSeats(5,10)
+        movieBookingSystem.initilizingSeats(5,10)
 
 
 
 
 
 
-        // const movieTicketsBooking = {
-        //     seats: [],
-        //     initilizeSeats(rows, col) {
-        //         this.seats = []
-        //         const rowLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        //         for (var i = 0; i < rows; i++) {
-        //             for (var j = 1; j <= col; j++) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // const movieBookingSystem={
+        //     seats:[],
+        //     initilizingSeats(row,col){
+        //         this.seats=[]
+        //         const rowLetters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        //         for(var i=0;i<=row;i++){
+        //             for(var j=1;j<col;j++){
         //                 this.seats.push({
-        //                     number: `${rowLetters[i]}${j}`,
-        //                     isBooked: false
+        //                     number:`${rowLetters[i]}${j}`,
+        //                     isBooked:false
         //                 })
         //             }
         //         }
         //         console.log(this.seats)
         //         this.renderSeats()
         //     },
-        //     renderSeats() {
-        //         const seatArrangement = document.getElementById("seatArrangement")
-        //         seatArrangement.innerHTML = ""
-        //         this.seats.forEach((seat) => {
-        //             const seatDiv = document.createElement("div")
-        //             seatDiv.className = `seat${seat.isBooked ? "seat-booked" :"seat-available"}`
-        //             seatDiv.textContent = seat.number
+        //     renderSeats(){
+        //         const seatArrangement=document.getElementById("seatArrangement")
+        //         seatArrangement.innerHTML=""
 
-        //             seatDiv.onclick = () => {
-        //                 if (!seat.isBooked) {
-        //                     const conformSeat = confirm(`Book seat${seat.number}?`)
-        //                     if (conformSeat) {
-        //                         seat.isBooked = true
+        //         this.seats.forEach((seat)=>{
+        //             const seatDiv=document.createElement("div")
+        //             seatDiv.className=`seat
+        //             ${seat.isBooked?"seat-booked":"seat-available"}`
+        //             seatDiv.textContent=seat.number
+
+        //             seatDiv.onclick=()=>{
+        //                 if(!seat.isBooked){
+        //                     const conformSeat=confirm(`book seat ${seat.number}?`)
+        //                     if(conformSeat){
+        //                         seat.isBooked=true
         //                         this.renderSeats()
         //                     }
-        //                 }
-        //                 else {
-        //                     alert(`Seat ${seat.number}is alredy Booked`)
+        //                 }else{
+        //                     alert("Seat is alredy booked")
         //                 }
         //             }
         //             seatArrangement.appendChild(seatDiv)
         //         })
         //     },
         // }
-        // movieTicketsBooking.initilizeSeats(5, 10)
+        // movieBookingSystem.initilizingSeats(5,10)
+
+
+      
     </script>
 </body>
 
