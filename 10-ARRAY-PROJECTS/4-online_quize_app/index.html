@@ -40,7 +40,9 @@
                 this.questions.push(question);
             },
 
-            // Randomize question order
+            // Randomize question order:The method Math.random() - 0.5 is used to shuffle the order of quiz questions randomly,
+            // so they appear in a different sequence each time. Without it, the questions would always appear in the 
+            // same predefined order, making the quiz less engaging and predictable.
             randomizeQuestions() {
                 this.questions.sort(() => Math.random() - 0.5);
             },
@@ -65,12 +67,15 @@
                     quizContainer.appendChild(questionDiv);
                 });
             },
-            // Collect user answers
+            // Collect user answers: in this index is :The index is used to create unique names 
+            // for each question's radio button group, ensuring the selected answers can be correctly identified and collected.
             collectAnswers() {
                 this.questions.forEach((question, index) => {
                     const selectedOption = document.querySelector(
                         `input[name="question-${index}"]:checked`
                     );
+
+                    //"UserAnswers is an object that accesses the ID of a question and stores the value of the selected option.
                     this.userAnswers[question.id] = selectedOption
                         ? selectedOption.value
                         : null;
