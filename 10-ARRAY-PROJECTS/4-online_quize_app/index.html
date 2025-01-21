@@ -56,21 +56,15 @@
 
                     questionDiv.innerHTML = `
           <p class="mb-2 font-semibold">${index + 1}. ${question.text}</p>
-          ${question.options
-                            .map(
-                                (option, i) =>
-                                    `<label class="block">
+          ${question.options.map((option, i) =>
+          `<label class="block">
                   <input type="radio" name="question-${index}" value="${option}" />
                   ${option}
-                </label>`
-                            )
-                            .join("")}
+            </label>`).join("")}
         `;
-
                     quizContainer.appendChild(questionDiv);
                 });
             },
-
             // Collect user answers
             collectAnswers() {
                 this.questions.forEach((question, index) => {
