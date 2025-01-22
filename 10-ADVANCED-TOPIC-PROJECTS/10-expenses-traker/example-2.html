@@ -54,7 +54,44 @@
         }
         fetchExpenses()
 
-        
+        const renderExpenses=()=>{
+            const expenseContainer=document.getElementById("expenses")
+            expenseContainer.innerHTML=""
+
+            expenses.forEach((expense)=>{
+                const expenseDiv=document.createElement("div")
+                expenseDiv.className="p-4 border rounded flex justify-between items-center"
+                expenseDiv.innerHTML=`
+                <div>
+                    <p>${expense.description}</p>
+                    <p>${expense.amount} </p>
+                    <p>${expense.category}</p>   
+                </div>
+                `
+                expenseContainer.appendChild(expenseDiv)
+            })
+        }
+        renderExpenses()
+        document.getElementById("add-expense-btn").addEventListener("click",()=>{
+            const description=document.getElementById("expense-description").value;
+            const amount=parseFloat(document.getElementById("expense-amount").value)
+            const category=document.getElementById("expense-category").value
+            if(!discription ||isNaN(amount) || amount<0){
+                alert("please enter the valid data")
+                return
+            }
+            const newExpenses={
+                id:Date.now(),
+                description,
+                amount,
+                category
+            }
+            expenses.push(newExpenses)
+            renderExpenses()
+        })
+
+
+
         document.addEventListener("DOMContentLoaded",()=>{
             console.log("the page is loded")
         })
