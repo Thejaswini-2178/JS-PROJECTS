@@ -1,21 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expense Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 font-sans">
   <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-center mb-6">Expense Tracker</h1>
 
     <!-- Add Expense Section -->
     <div class="mb-6">
-      <input id="expense-description" type="text" placeholder="Description" 
+      <input id="expense-description" type="text" placeholder="Description"
         class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 mb-2">
-      <input id="expense-amount" type="number" placeholder="Amount" 
+      <input id="expense-amount" type="number" placeholder="Amount"
         class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 mb-2">
       <select id="expense-category" class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 mb-2">
         <option value="Food">Food</option>
@@ -36,7 +37,7 @@
   <script>
     // Expenses data
     let expenses = [];
-  
+
     // Fetch expense data from server
     const fetchExpenses = async () => {
       try {
@@ -54,8 +55,12 @@
         console.error("Error fetching expenses:", error);
       }
     };
-    
-     // checking the function call 
+    // Save expenses to localStorage
+    const saveToLocalStorage = () => {
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+    };
+
+    // checking the function call 
     fetchExpenses()
     // Add expense
     document.getElementById("add-expense-btn").addEventListener("click", () => {
@@ -64,38 +69,38 @@
         document.getElementById("expense-amount").value
       );
       const category = document.getElementById("expense-category").value;
-  
+
       if (!description || isNaN(amount) || amount < 0) {
         alert("Please provide valid expense details!");
         return;
       }
-  
+
       const newExpense = {
         id: Date.now(),
         description,
         amount,
         category,
       };
-  
+
       expenses.push(newExpense);
       saveToLocalStorage();
       renderExpenses();
-  
+
       // Clear input fields
       document.getElementById("expense-description").value = "";
       document.getElementById("expense-amount").value = "";
     });
-  
+
     // Render expenses dynamically
     const renderExpenses = () => {
       const expenseContainer = document.getElementById("expenses");
       expenseContainer.innerHTML = "";
-  
+
       expenses.forEach((expense) => {
         const expenseElement = document.createElement("div");
         expenseElement.className =
           "p-4 border rounded flex justify-between items-center";
-  
+
         expenseElement.innerHTML = `
           <div>
             <p><strong>${expense.description}</strong></p>
@@ -105,31 +110,26 @@
           <button class="bg-red-500 text-white px-4 py-2 rounded" 
             onclick="deleteExpense(${expense.id})">Delete</button>
         `;
-  
+
         expenseContainer.appendChild(expenseElement);
       });
-  
+
       calculateTotal();
     };
-  
+
     // Calculate total expenses
     const calculateTotal = () => {
       const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
       document.getElementById("total-expenses").textContent = total.toFixed(2);
     };
-  
+
     // Delete expense
     const deleteExpense = (id) => {
       expenses = expenses.filter((expense) => expense.id !== id);
       saveToLocalStorage();
       renderExpenses();
     };
-  
-    // Save expenses to localStorage
-    const saveToLocalStorage = () => {
-      localStorage.setItem("expenses", JSON.stringify(expenses));
-    };
-  
+
     // Load expenses from localStorage
     const loadFromLocalStorage = () => {
       const storedExpenses = JSON.parse(localStorage.getItem("expenses") || "[]");
@@ -141,9 +141,10 @@
       }));
       renderExpenses();
     };
-  
+
     // Initialize application
     document.addEventListener("DOMContentLoaded", loadFromLocalStorage);
   </script>
 </body>
+
 </html>
