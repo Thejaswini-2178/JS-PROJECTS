@@ -35,63 +35,29 @@
         </div>
     </div>
     <script>
-        let expense=[]
-
+        let exxpenses=[]
         const fetchExpenses=async()=>{
             try {
                 const response=await fetch("http://localhost:3000/expenses")
-                if(!response) throw new Error("failed to fetching")
+                if(!response) throw new Error("Failed to fetch")
                 const data= await response.json()
-                expenses=data.map((expense)=>({
+            console.log(data)
+            expenses=data.map((expense)=>({
                 id:expense.id,
                 description:expense.description,
                 amount:expense.amount,
-                category:expense.category,
+                category:expense.category
             }))
-            renderExpenses()
-            console.log(data)
             } catch (error) {
-                console.error("error fetching:",error)
+                console.error("Error to fetching",error)
             }
         }
         fetchExpenses()
 
-        const saveToLocalStorage=()=>{
-            localStorage.setItem("expenses",JSON.stringify(expenses))
-        }
-        saveToLocalStorage()
-
-        const renderExpenses=()=>{
-            const expenseContainer=document.getElementById("expenses")
-            expenseContainer.innerHTML=""
-
-            expense.forEach((expenses)=>{
-                const expenseDiv=document.createElement("div")
-                expenseDiv.className="p-4 border rounded flex justify-between items-center"
-                expenseDiv.innerHTML=`
-                <div>
-                    <p>${expenses.description}</p>
-                    <p>${expenses.amount}</p>
-                    <p>${expenses.category}</p>
-                </div>
-                `
-                expenseContainer.appendChild(expenseDiv)
-            })
-        }
         
-        const loadFromLocalStorage=()=>{
-            const storedExpenses=JSON.parse(localStorage.getItem("expenses")||"[]")
-            expenses=storedExpenses.map((expense)=>({
-                id:expense.id,
-                description:expense.description,
-                amount:expense.amount,
-                category:expense.category,
-            }))
-            console.log("the page renderd")
-            renderExpenses()
-        }
-    document.addEventListener("DOMContentLoaded",loadFromLocalStorage)
- 
+        document.addEventListener("DOMContentLoaded",()=>{
+            console.log("the page is loded")
+        })
 
 
     </script>
