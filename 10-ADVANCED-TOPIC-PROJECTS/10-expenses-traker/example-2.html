@@ -35,65 +35,93 @@
         </div>
     </div>
     <script>
-        let exxpenses=[]
-        const fetchExpenses=async()=>{
+        let expenses = []
+        const fetchExpenses = async () => {
             try {
-                const response=await fetch("http://localhost:3000/expenses")
-                if(!response) throw new Error("Failed to fetch")
-                const data= await response.json()
-            console.log(data)
-            expenses=data.map((expense)=>({
+                const response =await fetch("http://localhost:3000/expenses")
+                if (!response.ok) throw new Error("Faild to fetch error")
+                const data = await response.json()
+                expenses = data.map((expense) => ({
+                    id: expense.id,
+                    description: expense.description,
+                    amount: expense.amount,
+                    category: expense.category
+                }))
+                renderExpenses()
+            } catch (error) {
+                console.error("error to fetching expenses:", error)
+            }
+        }
+        fetchExpenses()
+        const saveToLocalStorage = () => {
+            localStorage.setItem("expenses", JSON.stringify(expenses))
+        }
+
+        document.getElementById("add-expense-btn").addEventListener("click", () => {
+            const description = document.getElementById("expense-description").value;
+            const amount = parseFloat(document.getElementById("expense-amount").value);
+            const category = document.getElementById("expense-category").value;
+
+            if (!description || isNaN(amount) || amount < 0) {
+                alert("please enter the valid details")
+                return
+            }
+
+            const newExpenses = {
+                id: Date.now(),
+                description,
+                amount,
+                category,
+            }
+            expenses.push(newExpenses)
+            saveToLocalStorage()
+            renderExpenses()
+        })
+
+        const renderExpenses = () => {
+            const expensesList = document.getElementById("expenses")
+            expensesList.innerHTML = ""
+
+            expenses.forEach((expense) => {
+                const expensesDiv=document.createElement("div")
+                expensesDiv.className = "p-4 border rounded flex justify-between items-center";
+                expensesDiv.innerHTML = `
+            <div>
+                <p>${expense.description}</p>
+                <p>${expense.amount}</p>
+                <p>${expense.category}</p>
+            </div>
+            <button  style="background-color:red ;color:white"; onclick="removeExpense(${expense.id})">Remove</button>
+            `
+            expensesList.appendChild(expensesDiv)
+            })
+            totalExpenses()
+        }
+
+        const loadFromLocalStorage=()=>{
+            const storedExpenses=JSON.parse(localStorage.getItem("expenses")||"[]")
+            expenses=storedExpenses.map((expense)=>({
                 id:expense.id,
                 description:expense.description,
                 amount:expense.amount,
                 category:expense.category
             }))
-            } catch (error) {
-                console.error("Error to fetching",error)
-            }
-        }
-        fetchExpenses()
-
-        const renderExpenses=()=>{
-            const expenseContainer=document.getElementById("expenses")
-            expenseContainer.innerHTML=""
-
-            expenses.forEach((expense)=>{
-                const expenseDiv=document.createElement("div")
-                expenseDiv.className="p-4 border rounded flex justify-between items-center"
-                expenseDiv.innerHTML=`
-                <div>
-                    <p>${expense.description}</p>
-                    <p>${expense.amount} </p>
-                    <p>${expense.category}</p>   
-                </div>
-                `
-                expenseContainer.appendChild(expenseDiv)
-            })
-        }
-        renderExpenses()
-        document.getElementById("add-expense-btn").addEventListener("click",()=>{
-            const description=document.getElementById("expense-description").value;
-            const amount=parseFloat(document.getElementById("expense-amount").value)
-            const category=document.getElementById("expense-category").value
-            if(!discription ||isNaN(amount) || amount<0){
-                alert("please enter the valid data")
-                return
-            }
-            const newExpenses={
-                id:Date.now(),
-                description,
-                amount,
-                category
-            }
-            expenses.push(newExpenses)
             renderExpenses()
-        })
-        document.addEventListener("DOMContentLoaded",()=>{
-            console.log("the page is loded")
-        })
+        }
 
+        const totalExpenses=()=>{
+            const total=expenses.reduce((sum,expense)=>sum+expense.amount,0)
+            document.getElementById("total-expenses").textContent=total.toFixed(2)
+        }
+        const removeExpense=(id)=>{
+            expenses =expenses.filter((expense)=>expense.id !==id)
+            renderExpenses()
+        }
 
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("pag is loded")
+            loadFromLocalStorage()
+        })
     </script>
 </body>
 
