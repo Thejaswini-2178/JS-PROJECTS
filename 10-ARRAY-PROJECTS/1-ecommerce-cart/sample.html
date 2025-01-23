@@ -47,59 +47,22 @@
         </div>
     </div>
     <script>
-        const cart = {
-            items: [],
-            addProduct(product) {
-                const exists = this.items.find((item) => item.id === product.id)
-                if (!exists) this.items.push(product)
-            },
-            
-            renderCart() {
-                const cartItems = document.getElementById("cartItems")
-                cartItems.innerHTML = ""
-                this.items.forEach((item) => {
-                    const cartDiv = document.createElement("li")
-                    cartDiv.className = "flex justify-between items-center bg-gray-100 p-4 rounded-md";
-                    cartDiv.innerHTML = `
-                    <span>${item.name}</span>
-                    <div>
-                        <span class="mr-4">${item.price}</span>
-                        <button class="text-red-500 hover:underline" onclick="removeProduct(${item.id})">Remove</button>
-                    </div>
-                `
-                    cartItems.appendChild(cartDiv)
-                    cart.removeProduct(productId)
-
-                })
-                document.getElementById("totalPrice").textContent = this.calculateTotal()
-            },
-            removeProduct(productId) {
-                this.items = this.items.filter((item) => item.id !== productId);
-            },
-
-            calculateTotal() {
-                return this.items.reduce((total, item) => total + item.price, 0);
-            },
+        const ecomCart={
+            items:[],
+            addItem(){},
+            renderItems(){},
+            removeItem(){},
+            calculateTotal(){},
         }
-        function addProduct(e) {
+        function addItem(e){
             e.preventDefault()
-            const productName = document.getElementById("productName").value;
-            const productPrice = document.getElementById("productPrice").value;
-            const productId = Date.now();
-            const newProduct = {
-                id: productId,
-                name: productName,
-                price: productPrice,
+            const productName=document.getElementById("productName").value;
+            const productPrice=parseFloat(document.getElementById("productPrice").value)
+            const productId=Data.now()
+            const newProduct={
+                id:productId,name:productName,price:productPrice,
             }
-            cart.addProduct(newProduct)
-            console.log(newProduct)
-            console.log(cart.items)
-            cart.renderCart()
-
         }
-        // document.getElementById("addProductFrom").addEventListener("submit",addProduct)
-        document.getElementById("addProductForm").addEventListener("submit", addProduct);
-
     </script>
 </body>
 
