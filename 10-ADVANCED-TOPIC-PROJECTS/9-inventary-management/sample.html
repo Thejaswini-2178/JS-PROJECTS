@@ -38,8 +38,9 @@
             inventory=data.map((product)=>({
                 id:product.id,
                 name:product.name,
-                quantity:product.quantity,
+                quantity:Date.now()
             }))
+            renderCart()
             } catch (error) {
                 console.error("Error while fetching:",error)
             }
@@ -55,27 +56,66 @@
              }
              const newProduct={
                 id:Date.now(),
-                name,
-                quantity,
+                name:productName,
+                quantity:productQuantity
              }
              inventory.push(newProduct)
+             saveToLocalStorage()
+             renderCart()
         })
 
         const renderCart=()=>{
             const productsContainer=document.getElementById("products")
             productsContainer.innerHTML=""
-
-            inventory.
+            inventory.forEach((product)=>{
+                const  productDiv=document.createElement("div")
+                productDiv.className =
+                "p-4 border rounded flex justify-between items-center";
+                productDiv.innerHTML=`
+                <span>${product.name}</span>
+                <span>${product.quantity}</span>
+                <div>
+                    <button class="bg-yellow-500 text-white px-2 py-1 rounded mb-2" onclick="updateProduct(${product.id}, 'increase')">Increase</button>
+                    <button class="bg-yellow-500 text-white px-2 py-1 rounded mb-2" onclick="updateProduct(${product.id}, 'decrease')">Decrease</button>
+                    <button class="bg-red-500 text-white px-2 py-1 rounded"  onclick="removeProduct(${product.id})" >Remove</button>
+                </div>
+                `
+                productsContainer.appendChild(productDiv) 
+            })
         }
-                
 
+        const saveToLocalStorage=()=>{
+            localStorage.setItem("inventory",JSON.stringify(inventory))
+        }
+        const loadFromLocalStorage=()=>{
+            const storedProduct=JSON.parse(localStorage.getItem("inventory")||"[]")
+            renderCart()
+        }
 
+        const updateProduct=(id,action)=>{
+            const product=inventory.find((product)=>product.id===id)
+            if(product){
+                if(action==="increase"){
+                    product.quantity++
+                }
+                else if(action==="decrease"){
+                    if(product.quantity>0){
+                        product.quantity--
+                    }else{
+                        alert("the product need not be negative")
+                    }
+                }
+                saveToLocalStorage()
+                renderCart()
+            }
 
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            console.log("the pag is loded")
-        })
+        }
+        const removeProduct=(productId)=>{
+            inventory=inventory.filter((product)=>product.id !== productId)
+            saveToLocalStorage()
+            renderCart()
+        } 
+        document.addEventListener("DOMContentLoaded", loadFromLocalStorage)
     </script>
 </body>
 
