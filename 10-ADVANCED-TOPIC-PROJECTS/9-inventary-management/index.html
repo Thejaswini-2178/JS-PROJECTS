@@ -90,9 +90,7 @@
         // Load inventory from localStorage
         const loadFromLocalStorage = () => {
             const storedInventory = localStorage.getItem("inventory");
-            if (storedInventory) {
-                inventory = JSON.parse(storedInventory);
-            }
+            if (storedInventory) inventory = JSON.parse(storedInventory);
         };
 
         // Render inventory dynamically
