@@ -47,22 +47,56 @@
         </div>
     </div>
     <script>
-        const ecomCart={
-            items:[],
-            addItem(){},
-            renderItems(){},
-            removeItem(){},
-            calculateTotal(){},
-        }
-        function addItem(e){
-            e.preventDefault()
-            const productName=document.getElementById("productName").value;
-            const productPrice=parseFloat(document.getElementById("productPrice").value)
-            const productId=Data.now()
-            const newProduct={
-                id:productId,name:productName,price:productPrice,
+        const ecomCart = {
+            items: [],
+            addProduct(product) {
+                const exists = this.items.find((item) => item.id === product.id)
+                if (!exists) this.items.push(product)
+            },
+            renderItems(productId) {
+                const cartItems = document.getElementById("cartItems")
+                cartItems.innerHTML = ""
+
+                this.items.forEach((product) => {
+                    const productList = document.createElement("li")
+                    productList.className = "flex justify-between items-center bg-gray-100 p-4 rounded-md";
+                    productList.innerHTML = `
+                    <span>${product.name}</span>
+                    <div>
+                        <span>${product.price}<span>
+                        <button  style="color:red" onclick="removeItem(${product.id})">Remove</button>
+                    </div>
+                    `
+                    cartItems.appendChild(productList)
+                })
+                document.getElementById("totalPrice").textContent = this.totalPrice()
+            },
+            removeProduct(productId) {
+                this.items = this.items.filter((item) => item.id !== productId)
+            },
+            totalPrice() {
+                return this.items.reduce((sum, item) => sum + item.price, 0)
             }
         }
+        function addProduct(e) {
+            e.preventDefault()
+            const productName = document.getElementById("productName").value;
+            const productPrice = parseFloat(document.getElementById("productPrice").value)
+            const productId = Date.now()
+            const newProduct = {
+                id: productId, name: productName, price: productPrice
+            }
+            ecomCart.addProduct(newProduct)
+            ecomCart.renderItems()
+            e.target.reset()
+
+        }
+        function removeItem(productId) {
+            ecomCart.removeProduct(productId)
+            ecomCart.renderItems()
+        }
+
+        document.getElementById("addProductForm").addEventListener("submit", addProduct)
     </script>
 </body>
 
