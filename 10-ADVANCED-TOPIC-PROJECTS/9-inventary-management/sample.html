@@ -32,7 +32,7 @@
         const fetchInventory = async () => {
             try {
                 const response = await fetch("http://localhost:3000/inventory")
-                if(!response) throw new Error(" error to fetch")
+                if(!response.ok) throw new Error(" error to fetch")
                 const data=await response.json()
             console.log(data)
             inventory=data.map((product)=>({
@@ -108,7 +108,6 @@
                 saveToLocalStorage()
                 renderCart()
             }
-
         }
         const removeProduct=(productId)=>{
             inventory=inventory.filter((product)=>product.id !== productId)
