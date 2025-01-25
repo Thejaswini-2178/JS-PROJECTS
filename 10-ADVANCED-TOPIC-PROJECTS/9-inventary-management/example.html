@@ -41,6 +41,7 @@
                 name:product.name,
                 quantity:product.quantity
             }))
+            renderInventory()
             } catch (error) {
                 console.error("Error to fetch:",error)
             }
@@ -54,12 +55,12 @@
                 alert("please enter the valied data")
                 return
             }
-            if(productQuantity>0){
+            if(productQuantity<0){
                 alert("Quntity need not be negative")
                 return
             }
         })
-        const renderCart=()=>{
+        const renderInventory=()=>{
             const inventoryContainer=document.getElementById("inventory")
             inventoryContainer.innerHTML=""
             inventory.forEach((Product)=>{
@@ -77,7 +78,32 @@
             })
         }
 
-        const saveToLocalServer=()
+        const saveToLocalServer=()=>{
+            localStorage.setItem("inventory",JSON.stringify(inventory))
+        }
+        const loadFromLocalStorage=()=>{
+            const storedInventory=JSON.parse(localStorage.getItem("inventory")|| "[]")
+            renderInventory()
+        }
+        const updateInventery=()=>{
+            const products=document.getElementById("products")
+            if(products){
+                if(action==="increase"){
+                    product.quantity++
+                }
+                else if(action==="decrease"){
+                    if(product.quantity>0){
+                        product.quantity--
+                    }
+                }
+                saveToLocalServer()
+                renderInventory()
+            }
+        }
+        const removeInventary=(id)=>{
+            inventory=inventory.reduce((product)=>product.id===id)
+            renderInventory()
+        }
 
 
         document.addEventListener("DOMContentLoaded",()=>{
