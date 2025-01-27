@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Management System</title>
-    <script src="app.js" defer></script>
+    <!-- <script src="app.js" defer></script> -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -52,91 +52,60 @@
         </div>
     </div>
     <script>
-        const taskManager = {
-            tasks: {
-                pending: [],
-                inProgress: [],
-                completed: [],
+        const taskManager={
+            tasks:{
+                pending:[],
+                onProgress:[],
+                completed:[],
             },
+            addTask(taskName){
+                const newTask={
+                    id:Date.now(),
+                    name:taskName,
+                    completed:false,
+                    date:new Date()
+                }
+                this.tasks.pending.push(newTask)
+                console.log("Added")
+                this.renderTasks()
 
-            // Add a new task
-            addTask(taskName) {
-                const newTask = {
-                    id: Date.now(),
-                    name: taskName,
-                    completed: false,
-                    date: new Date(),
-                };
-                this.tasks.pending.push(newTask);
-                this.renderTasks();
             },
-
-            // Move task between categories
-            moveTask(taskId, fromCategory, toCategory) {
-                const taskIndex = this.tasks[fromCategory].findIndex(
-                    (task) => task.id === taskId
-                );
-                if (taskIndex !== -1) {
-                    const [task] = this.tasks[fromCategory].splice(taskIndex, 1);
-                    if (toCategory === "completed") task.completed = true;
-                    this.tasks[toCategory].push(task);
-                    this.renderTasks();
+            moveTask(taskId,fromTask,toTask){
+                const taskIndex=this.tasks[fromTask].findIndex((t)=>t.id===id)
+                if(taskIndex !==-1){
+                    const[task]=this.tasks[fromTask].splice(taskIndex,1)
+                     if(toTask==="completed")  this.completed=true
+                    this.tasks[toTask].push(taskIndex)
+                    this.renderTasks()
                 }
             },
-
-            // Remove a task
-            removeTask(taskId, category) {
-                this.tasks[category] = this.tasks[category].filter(
-                    (task) => task.id !== taskId
-                );
-                this.renderTasks();
+            renderTasks(){
+                const renderContainer=(taskItem,taskItemId)=>{
+                    const container=document.getElementById("taskItemId")
+                    container.innerHTML=""
+                    this.tasks[taskItem].forEach((task)=>{
+                        const item=document.createElement("li")
+                        item.innerHTML=`
+                        <span>${task.name}</span>
+                        <div>
+                            ${taskItem}
+                        </div>
+                        `
+                    })
+                }
             },
-
-            // Render tasks in their respective categories
-            renderTasks() {
-                // Helper function to render tasks
-                const renderCategory = (category, containerId) => {
-                    const container = document.getElementById(containerId);
-                    container.innerHTML = ""; // Clear existing tasks
-
-                    this.tasks[category].forEach((task) => {
-                        const taskItem = document.createElement("li");
-                        taskItem.className =
-                            "flex justify-between items-center bg-gray-100 p-3 rounded";
-
-                        taskItem.innerHTML = `
-            <span>${task.name}</span>
-            <div>
-              ${category !== "completed"
-                                ? `<button class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" onclick="taskManager.moveTask(${task.id
-                                }, '${category}', '${category === "pending" ? "inProgress" : "completed"
-                                }')">Move</button>`
-                                : ""
-                            }
-              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="taskManager.removeTask(${task.id
-                            }, '${category}')">Remove</button>
-            </div>
-          `;
-
-                        container.appendChild(taskItem);
-                    });
-                };
-
-                renderCategory("pending", "pendingTasks");
-                renderCategory("inProgress", "inProgressTasks");
-                renderCategory("completed", "completedTasks");
+            removeTasks(taskId,task){
+                this.tasks[task]=this.tasks[task].filter((task)=>task.id!==taskId)
+                this.renderTasks()
             },
-        };
-
-        
-        // Add event listener for adding tasks
-        document.getElementById("addTaskForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const taskName = document.getElementById("taskName").value;
-            taskManager.addTask(taskName);
-            e.target.reset();
-        });
+        }
+        document.getElementById("addTaskForm").addEventListener("click",function(e){
+            e.preventDefault()
+            const taskName=document.getElementById("taskName").value;
+            taskManager.addTask(taskName)
+        })
     </script>
 </body>
 
 </html>
+
