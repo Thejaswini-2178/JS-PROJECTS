@@ -52,58 +52,59 @@
         </div>
     </div>
     <script>
-        const taskManager={
-            tasks:{
-                pending:[],
-                onProgress:[],
-                completed:[],
-            },
-            addTask(taskName){
-                const newTask={
-                    id:Date.now(),
-                    name:taskName,
-                    completed:false,
-                    date:new Date()
-                }
-                this.tasks.pending.push(newTask)
-                console.log("Added")
-                this.renderTasks()
+        
+        // const taskManager={
+        //     tasks:{
+        //         pending:[],
+        //         onProgress:[],
+        //         completed:[],
+        //     },
+        //     addTask(taskName){
+        //         const newTask={
+        //             id:Date.now(),
+        //             name:taskName,
+        //             completed:false,
+        //             date:new Date()
+        //         }
+        //         this.tasks.pending.push(newTask)
+        //         console.log("Added")
+        //         this.renderTasks()
 
-            },
-            moveTask(taskId,fromTask,toTask){
-                const taskIndex=this.tasks[fromTask].findIndex((t)=>t.id===id)
-                if(taskIndex !==-1){
-                    const[task]=this.tasks[fromTask].splice(taskIndex,1)
-                     if(toTask==="completed")  this.completed=true
-                    this.tasks[toTask].push(taskIndex)
-                    this.renderTasks()
-                }
-            },
-            renderTasks(){
-                const renderContainer=(taskItem,taskItemId)=>{
-                    const container=document.getElementById("taskItemId")
-                    container.innerHTML=""
-                    this.tasks[taskItem].forEach((task)=>{
-                        const item=document.createElement("li")
-                        item.innerHTML=`
-                        <span>${task.name}</span>
-                        <div>
-                            ${taskItem}
-                        </div>
-                        `
-                    })
-                }
-            },
-            removeTasks(taskId,task){
-                this.tasks[task]=this.tasks[task].filter((task)=>task.id!==taskId)
-                this.renderTasks()
-            },
-        }
-        document.getElementById("addTaskForm").addEventListener("click",function(e){
-            e.preventDefault()
-            const taskName=document.getElementById("taskName").value;
-            taskManager.addTask(taskName)
-        })
+        //     },
+        //     moveTask(taskId,fromTask,toTask){
+        //         const taskIndex=this.tasks[fromTask].findIndex((t)=>t.id===id)
+        //         if(taskIndex !==-1){
+        //             const[task]=this.tasks[fromTask].splice(taskIndex,1)
+        //              if(toTask==="completed")  this.completed=true
+        //             this.tasks[toTask].push(taskIndex)
+        //             this.renderTasks()
+        //         }
+        //     },
+        //     renderTasks(){
+        //         const renderContainer=(taskItem,taskItemId)=>{
+        //             const container=document.getElementById("taskItemId")
+        //             container.innerHTML=""
+        //             this.tasks[taskItem].forEach((task)=>{
+        //                 const item=document.createElement("li")
+        //                 item.innerHTML=`
+        //                 <span>${task.name}</span>
+        //                 <div>
+        //                     ${taskItem}
+        //                 </div>
+        //                 `
+        //             })
+        //         }
+        //     },
+        //     removeTasks(taskId,task){
+        //         this.tasks[task]=this.tasks[task].filter((task)=>task.id!==taskId)
+        //         this.renderTasks()
+        //     },
+        // }
+        // document.getElementById("addTaskForm").addEventListener("click",function(e){
+        //     e.preventDefault()
+        //     const taskName=document.getElementById("taskName").value;
+        //     taskManager.addTask(taskName)
+        // })
     </script>
 </body>
 
